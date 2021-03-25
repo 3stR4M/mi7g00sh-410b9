@@ -5,4 +5,4 @@ title: About
 
 Something about me.
 
-<img src="/assets/img/MarineGEO_logo.png" alt="MarineGEO circle logo" style="height: 100px; width:100px;"/>
+<img src="https://media.tenor.com/images/6bdd46b8570f0767b73f9b3dfa61a957/tenor.png" alt="MarineGEO circle logo" style="height: 100px; width:100px;"/>
