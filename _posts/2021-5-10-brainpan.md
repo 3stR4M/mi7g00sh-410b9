@@ -3,7 +3,7 @@ title: Vulnhub "brainpan" write-up
 published: true
 ---
 
-For everyone who's trying to get some hands-on practice on buffer overflows, without getting too much of a headache,
+For anyone who's trying to get some hands-on practice on buffer overflows, without getting too much of a headache,
 brainpan is a great box to begin with, as it gives the plain basics of how you should approach buffer overflows.
 I suggest trying to solve the box on your own before moving on with the walkthrough, but if you must use it... try not to read the whole thing,
 but a bit just to get yourself un-stuck.
