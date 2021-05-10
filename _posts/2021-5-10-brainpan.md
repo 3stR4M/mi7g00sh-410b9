@@ -1,11 +1,11 @@
 ---
-title: Vulnhub "brainpan" walkthrough
+title: Vulnhub "brainpan" write-up
 published: true
 ---
 
 For everyone who's trying to get some hands-on practice on buffer overflows, without getting too much of a headache,
 brainpan is a great box to begin with, as it gives the plain basics of how you should approach buffer overflows.
-I suggest trying to solve the box on your own before moving on with the walkthorugh, but if you must use it... try not to read the whole thing,
+I suggest trying to solve the box on your own before moving on with the walkthrough, but if you must use it... try not to read the whole thing,
 but a bit just to get yourself un-stuck.
 
 First of all, after loading up the brainpan machine, which we'll ignore is an ubuntu machine just for the means of practicing,
@@ -40,7 +40,7 @@ PORT      STATE SERVICE VERSION
 
 We can see that there's an unknown service under port 9999, which we'll try to fingerprint later on,
 because we know for certain that there's a HTTP server running on port 10000.
-We'll go and browse to the site under port 10000 and we'll get:
+We'll go and browse to the site behind port 10000 and we'll get:
 
 <img width="352" alt="site" src="https://user-images.githubusercontent.com/47437989/117629758-2a184d80-b183-11eb-83f4-3e93101318ec.png">
 
@@ -72,7 +72,7 @@ END_TIME: Mon May 10 11:33:08 2021
 DOWNLOADED: 4612 - FOUND: 2
 ```
 
-As we can see theres a directory called "bin", when we go to that directory we get the directory listing for /bin/, which includes a file named "brainpan.exe".
+As we can see there's a directory called "bin", when we go to that directory we get the directory listing for /bin, which includes a file named "brainpan.exe".
 We download the file for future use.
 
 Next on is to try and see what's behind port 9999, I'll use netcat to try and grab a banner for the service behind the port:
@@ -138,11 +138,11 @@ for string in buffer:
     s.close()
  ```
 
-this script will flood the binary on the windows machine until it breaks(if it breaks).
+this script will flood the running binary on the windows machine until it breaks(if it breaks).
 
 <img width="149" alt="EIP414141" src="https://user-images.githubusercontent.com/47437989/117634745-e7a53f80-b187-11eb-8f6f-310b24d6b68e.png">
 
-As we can see the EIP register is 41414141, which means "AAAA"(A = \x41)... this means that we overflowed the binary.
+As we can see the EIP register is 41414141, which means "AAAA"... this means that we overflowed the binary.
 Now our next step is to see how many bytes we fuzzed:
 
 ```
@@ -157,7 +157,7 @@ Fuzzing... with 1300 bytes
 Fuzzing... with 1500 bytes
 ```
 
-So we've got an overflow, we'll use that to create a pattern to find the exact spot of the crash:
+Now we'll use that to create a pattern to find the exact spot of the crash:
 
 ```
 /usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 1500 
@@ -194,7 +194,7 @@ Running the code give us the following address on the EIP register:
 
 ```
 
-Now we know that the break happens after exactly 524 bytes, the next thing we do is to overwrite the EIP just to make sure we're exact:
+Now we know that the break happens after exactly 524 bytes, the next thing we do is to overwrite the EIP just to make sure that we're exact:
 
 ```python
 
@@ -344,15 +344,15 @@ except:
 s.close()
 ```
 
-Note that i added some NOPs (\x90) to create some sort of spacing before the shellcode.
+Note that I added some NOPs (\x90) to create some spacing before the shellcode.
 Opening a netcat listener on port 4444:
 
 ```
 nc -lvnp 4444                                                                                                                                                                                                                       
 listening on [any] 4444 ...
 ```
-and we run our script.
-and we've got a shell on our own machine:
+And we run our script.
+And we've got a shell on our own machine:
 <img width="255" alt="winshell" src="https://user-images.githubusercontent.com/47437989/117640960-4372c700-b18e-11eb-9345-2241fac6f4fb.png">
 
 next up is to create a linux shellcode and use it against the brainpan box.
@@ -372,7 +372,7 @@ using python to get an interactive shell:
 ```
 python -c 'import pty; pty.spawn("/bin/bash")'
 ```
-
+Now on to privilege escalation,
 we run sudo -l and we get the following:
 
 ```
@@ -397,7 +397,7 @@ Where [action] is one of:
   - manual [command]
 ```
 
-we can use the manual action to give a command after it, so let's try and run bash with it:
+we can use the manual action to give a command after it, so let's try to read a manual with it:
 
 ```
 sudo /home/anansi/bin/anansi_util manual bash
